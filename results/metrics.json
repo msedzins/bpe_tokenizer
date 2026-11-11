@@ -1,0 +1,27 @@
+{
+  "input": {
+    "path": "data/test.txt",
+    "bytes": 5042301,
+    "characters": 4771412,
+    "sha256": "e864d613a6606fda47ca6e954c13301d6b63b7fa2e291ba77ed35e85349b5b4e",
+    "word_definition": "Non-empty sequences separated by Python str.split() whitespace"
+  },
+  "model_sha256": "d18892e43af402132ed03ee8e1c08d170dac4c0ef57088331f640a4319c1e78c",
+  "tiktoken_version": "0.12.0",
+  "tokenizers": {
+    "tokenizers/polish-bpe-1024.json": {
+      "word_count": 648222,
+      "token_count": 2233770,
+      "fertility": 3.4459953534437275,
+      "characters_per_token": 2.1360354915680664,
+      "round_trip": true
+    },
+    "cl100k_base": {
+      "word_count": 648222,
+      "token_count": 1823293,
+      "fertility": 2.8127601346452296,
+      "characters_per_token": 2.616920045214894,
+      "round_trip": true
+    }
+  }
+}
