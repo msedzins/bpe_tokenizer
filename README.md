@@ -24,6 +24,17 @@ python3 -m pip install pytest
 python3 -m pytest
 ```
 
+## Pliki eksperymentu
+
+Kod BPE znajduje się w [`bpe.py`](bpe.py). Skrypty [`prepare_corpus.py`](prepare_corpus.py),
+[`train.py`](train.py) i [`evaluate.py`](evaluate.py) przygotowują dane, trenują
+model i wykonują pomiar. Zapisane tokenizery znajdują się w katalogu
+[`tokenizers/`](tokenizers/), a metryki w [`results/`](results/).
+
+Do uruchomienia potrzebny jest Python 3.11 lub nowszy. Poniższe polecenia
+wykonuj z katalogu repozytorium. Wymagają dostępu do internetu przy pierwszym
+pobraniu korpusu i danych `cl100k_base`.
+
 ## Korpus i podział
 
 Źródłem jest [Wikipedia w Polish DynaWord](https://huggingface.co/datasets/SlayerLab/polish-dynaword/tree/ad1e59fbee7055326706a6f1709473bf22ac34ef/data/wikipedia), rewizja `ad1e59fbee7055326706a6f1709473bf22ac34ef`. [Karta źródła](https://huggingface.co/datasets/SlayerLab/polish-dynaword/blob/ad1e59fbee7055326706a6f1709473bf22ac34ef/data/wikipedia/wikipedia.md) opisuje pochodzenie i licencję danych.
@@ -78,6 +89,9 @@ python3 train.py --input data/train.txt --max-chars 1000000 --iterations 768 --o
 python3 train.py --input data/train.txt --max-chars 1000000 --iterations 3840 --output tokenizers/polish-bpe-4096.json
 ```
 
+Zmierzony czas samego treningu wyniósł 122,94 s dla słownika 1024 i 476,65 s
+dla słownika 4096. Czas zależy od środowiska uruchomieniowego.
+
 Metadane zapisane w JSON zawierają rozmiar i SHA-256 próbki, żądaną i wykonaną
 liczbę scaleń, rozmiar słownika i czas treningu w sekundach. Czas nie obejmuje
 wczytywania danych ani zapisu pliku. Kolejne uruchomienie nadpisuje artefakt.
@@ -129,3 +143,17 @@ różnice w pretokenizacji. Własny BPE przetwarza ciąg bajtów bez pretokeniza
 więc może tworzyć tokeny obejmujące spacje i fragmenty sąsiednich słów. Wyniki
 dotyczą przygotowanego zbioru testowego z Wikipedii. Do oceny na innych typach
 tekstu potrzebny jest osobny pomiar.
+
+### Ograniczenia
+
+Próbka pochodzi z początku jednego źródła i reprezentuje przede wszystkim styl
+encyklopedyczny. Podział przydziela całe rekordy do train albo test, ale nie
+sprawdza duplikatów ani podobieństwa treści między rekordami. Próbka treningowa
+kończy się po milionie znaków, więc może kończyć się w środku dokumentu.
+Wynik nie pokazuje zachowania tokenizera na rozmowach, kodzie lub innych
+rodzajach tekstu. Porównanie dotyczy długości tokenizacji i round-trip, bez
+pomiaru jakości modelu językowego.
+
+Czas treningu w metadanych może zmieniać się między uruchomieniami. W rezultacie
+SHA-256 całego pliku JSON tokenizera także może się zmienić, nawet jeśli lista
+reguł pozostanie taka sama.
